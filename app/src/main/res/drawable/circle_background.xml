@@ -1,0 +1,15 @@
+<!-- res/drawable/circle_background.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- White rim -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@android:color/white" />
+        </shape>
+    </item>
+    <!-- Grey inside -->
+    <item android:left="8dp" android:right="8dp" android:top="8dp" android:bottom="8dp">
+        <shape android:shape="oval">
+            <solid android:color="@android:color/darker_gray" />
+        </shape>
+    </item>
+</layer-list>

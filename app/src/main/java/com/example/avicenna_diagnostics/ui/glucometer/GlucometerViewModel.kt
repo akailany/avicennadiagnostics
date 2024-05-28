@@ -1,5 +1,54 @@
 package com.example.avicenna_diagnostics.ui.glucometer
 
+//Import Database
+
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.example.avicenna_diagnostics.backend.Database
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
+class GlucometerViewModel : ViewModel() {
+
+    private val _glucoseLevels = MutableStateFlow<Pair<Float, Float>?>(null)
+    val glucoseLevels: StateFlow<Pair<Float, Float>?> = _glucoseLevels
+
+    private val _flag = MutableLiveData<Boolean>(true)
+    private var flag = false // Regular Boolean for internal logic
+
+    fun setFlag(value: Boolean) {
+        _flag.value = value
+        flag = value
+    }
+
+    private val _text = MutableLiveData<String>().apply {
+        value = "Collect blood sample then press below button"
+    }
+    val text: LiveData<String> = _text
+
+    private var currentIndex = 0
+
+    init {
+        Log.d("GlucometerViewModel", "Class initialized with currentIndex: $currentIndex")
+    }
+
+    fun getNextDataPoint() {
+        if ((currentIndex < Database.glucoseData.size) && flag) {
+            _glucoseLevels.value = Database.glucoseData[currentIndex]
+            Log.d("DataPoint", "Current Index: $currentIndex, Data Point: ${_glucoseLevels.value}")
+            currentIndex++
+        } else {
+            // Reset or handle the end of the dataset
+            currentIndex = 0
+            setFlag(false)
+            Log.d("DataPoint", "Else Index: $currentIndex")
+        }
+    }
+}
+
+/******************************************
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -153,3 +202,4 @@ class GlucometerViewModel : ViewModel() {
         }
     }
 }
+******************************************/
